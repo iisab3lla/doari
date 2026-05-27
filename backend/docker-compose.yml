@@ -1,0 +1,72 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: doari-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  usuarios-service:
+    build:
+      context: .
+      dockerfile: usuarios-service/Dockerfile
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usuarios_db
+      SPRING_DATASOURCE_USERNAME: doari
+      SPRING_DATASOURCE_PASSWORD: doari
+      JWT_SECRET: doari-compose-secret-change-me-please-32chars
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  doacoes-service:
+    build:
+      context: .
+      dockerfile: doacoes-service/Dockerfile
+    environment:
+      SERVER_PORT: 8082
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/doacoes_db
+      SPRING_DATASOURCE_USERNAME: doari
+      SPRING_DATASOURCE_PASSWORD: doari
+      NOTIFICACAO_SERVICE_URL: http://notificacao-service:8083
+      JWT_SECRET: doari-compose-secret-change-me-please-32chars
+      NOTIFICACAO_INTERNAL_TOKEN: doari-compose-internal-token-change-me
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      notificacao-service:
+        condition: service_started
+
+  notificacao-service:
+    build:
+      context: .
+      dockerfile: notificacao-service/Dockerfile
+    environment:
+      SERVER_PORT: 8083
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notificacoes_db
+      SPRING_DATASOURCE_USERNAME: doari
+      SPRING_DATASOURCE_PASSWORD: doari
+      JWT_SECRET: doari-compose-secret-change-me-please-32chars
+      NOTIFICACAO_INTERNAL_TOKEN: doari-compose-internal-token-change-me
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql-data:

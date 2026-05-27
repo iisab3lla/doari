@@ -1,0 +1,872 @@
+/* =========================
+   Base da página
+   ========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Nunito", sans-serif;
+    background-color: #fffdf3;
+    color: #000;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+/* =========================
+   Estrutura principal
+   ========================= */
+
+.painel-doador {
+    min-height: 100vh;
+    padding: 26px 72px 48px;
+}
+
+/* Topo com usuário logado e saída */
+.topo-painel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #8f8f8f;
+    padding-bottom: 8px;
+}
+
+.usuario {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.usuario img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.usuario p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.usuario strong {
+    color: #365f53;
+}
+
+.botao-sair {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.botao-sair img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+}
+
+.botao-sair:hover {
+    opacity: 0.75;
+}
+
+/* =========================
+   Conteúdo do painel
+   ========================= */
+
+.conteudo-painel {
+    padding-top: 26px;
+}
+
+.botao-doacao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    min-width: 178px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 22px;
+    background-color: #98d2bd;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(54, 95, 83, 0.14);
+}
+
+.botao-doacao:hover {
+    background-color: #86c7ae;
+    transform: translateY(-1px);
+}
+
+.botao-doacao:active {
+    transform: translateY(0);
+}
+
+.icone-botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    margin-top: -2px;
+}
+
+.texto-introducao {
+    margin: 22px 0 14px;
+    color: #5b5b5b;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+/* Cards principais: pedidos abertos e minhas doações */
+.cards-painel {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 42px;
+}
+
+.notificacoes-card {
+    grid-column: 1 / -1;
+    min-height: 260px;
+    display: none !important;
+}
+
+.card-painel {
+    min-height: 600px;
+    border-radius: 20px;
+    background-color: #fffdf8;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.14);
+    padding: 38px 42px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-painel h2 {
+    margin: 0 0 4px;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.card-painel > p {
+    margin: 0;
+    color: #365f53;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* Estado vazio usado quando ainda não há pedidos ou doações */
+.mensagem-vazia {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 34px;
+}
+
+.mensagem-vazia h3 {
+    margin: 0 0 4px;
+    color: #365f53;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.mensagem-vazia p {
+    margin: 0;
+    color: #9d9d9d;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* =========================
+   Tabela de doações
+   ========================= */
+
+.tabela-doacoes {
+    margin-top: 42px;
+}
+
+.cabecalho-doacoes,
+.linha-doacao {
+    display: grid;
+    grid-template-columns: 1.3fr 1.5fr 1fr 0.5fr;
+    align-items: center;
+    gap: 14px;
+}
+
+.tabela-ong-doacoes .cabecalho-doacoes,
+.tabela-ong-doacoes .linha-doacao {
+    grid-template-columns: 1.25fr 1.05fr 0.95fr 48px;
+}
+
+.tabela-ong-disponiveis .cabecalho-doacoes,
+.tabela-ong-disponiveis .linha-doacao {
+    grid-template-columns: 1.35fr 1fr 0.95fr 0.85fr;
+}
+
+.tabela-ong-pedidos .cabecalho-doacoes,
+.tabela-ong-pedidos .linha-doacao {
+    grid-template-columns: 1.15fr 0.95fr 0.95fr 0.85fr 48px;
+}
+
+.tabela-pedidos-doador .cabecalho-doacoes,
+.tabela-pedidos-doador .linha-doacao {
+    grid-template-columns: 1.1fr 0.9fr 1.2fr 150px;
+}
+
+.cabecalho-doacoes {
+    padding-bottom: 14px;
+    border-bottom: 1px solid #9d9d9d;
+    color: #365f53;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.linha-doacao {
+    min-height: 44px;
+    border-bottom: 1px solid #b8b8b8;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.acao-doacao {
+    color: #777;
+    font-weight: 800;
+}
+
+.form-message {
+    width: fit-content;
+    margin: 12px 0 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.success-message {
+    background-color: #dff4ea;
+    color: #165f50;
+}
+
+.error-message {
+    background-color: #ffe1e1;
+    color: #9b1c1c;
+}
+
+.lista-notificacoes {
+    display: grid;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.notificacao-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 14px;
+    align-items: start;
+    border-bottom: 1px solid #d8d6cf;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.notificacao-item strong {
+    color: #365f53;
+}
+
+.notificacao-item span {
+    color: #444;
+}
+
+/* Etiquetas de status. As classes são geradas por doacao.statusCss no backend */
+.status {
+    width: fit-content;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.status.disponivel {
+    background-color: #cceee4;
+    color: #007b61;
+}
+
+.status.solicitada,
+.status.pendente {
+    background-color: #f7ead3;
+    color: #9b5f14;
+}
+
+.status.confirmada {
+    background-color: #98d2bd;
+    color: #165f50;
+}
+
+.status.entregue {
+    background-color: #d8d6cf;
+    color: #5a5a55;
+}
+
+.status.removido,
+.status.recusada {
+    background-color: #f8dfe3;
+    color: #ad3145;
+}
+
+/* Ações da tabela */
+.acoes-doacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.botao-excluir-doacao,
+.botao-excluir-pedido,
+.botao-visualizar-doacao {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.botao-excluir-doacao img,
+.botao-excluir-pedido img,
+.botao-visualizar-doacao img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    opacity: 0.75;
+}
+
+.botao-excluir-doacao:hover img,
+.botao-excluir-pedido:hover img,
+.botao-visualizar-doacao:hover img {
+    opacity: 1;
+}
+
+.botao-atender-pedido {
+    min-width: 126px;
+    height: 28px;
+    border: none;
+    border-radius: 16px;
+    background-color: #98d2bd;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    padding: 0 14px;
+}
+
+.botao-atender-pedido:hover {
+    background-color: #86c7ae;
+}
+
+/* =========================
+   Modal de cadastro de doação
+   ========================= */
+
+.modal-fundo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(255, 253, 243, 0.45);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.modal-fundo.ativo {
+    display: flex;
+}
+
+.modal-doacao {
+    position: relative;
+    width: min(760px, 100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    background-color: #fffdf3;
+    border: 1px solid #365f53;
+    border-radius: 24px;
+    padding: 42px 54px 32px;
+    box-shadow: 0 18px 28px rgba(0, 0, 0, 0.25);
+}
+
+.modal-criar-pedido {
+    width: min(680px, 100%);
+}
+
+.fechar-modal {
+    position: absolute;
+    top: 34px;
+    right: 54px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background-color: #000;
+    color: #fff;
+    font-size: 20px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.modal-doacao h2 {
+    margin: 0 0 10px;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.modal-subtitulo {
+    margin: 0 0 28px;
+    color: #365f53;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.grupo-campo {
+    margin-bottom: 18px;
+}
+
+.grupo-campo h3,
+.titulo-contato {
+    margin: 0 0 12px;
+    color: #365f53;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.grupo-campo label {
+    display: block;
+    margin-bottom: 8px;
+    color: #365f53;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.opcoes-doacao {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.opcoes-doacao label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+    margin: 0;
+    color: #000;
+    font-size: 15px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.opcoes-doacao input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #000;
+}
+
+.grupo-campo input,
+.grupo-campo textarea,
+.grupo-campo select {
+    width: 100%;
+    border: 1px solid #9d9d9d;
+    border-radius: 9px;
+    background-color: #fffdf3;
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+}
+
+.grupo-campo input,
+.grupo-campo select {
+    height: 36px;
+    padding: 0 12px;
+}
+
+.grupo-campo textarea {
+    height: 92px;
+    padding: 12px 14px;
+    resize: none;
+}
+
+.grupo-campo input::placeholder,
+.grupo-campo textarea::placeholder {
+    color: #b3b3b3;
+}
+
+.grupo-campo select {
+    width: 145px;
+    color: #9d9d9d;
+}
+
+/* Os campos específicos começam ocultos e são exibidos pelo JS */
+.campos-tipo {
+    display: none;
+}
+
+.modal-criar-pedido:has(input[value="fisico"]:checked) .campos-pedido-fisico,
+.modal-criar-pedido:has(input[value="dinheiro"]:checked) .campos-pedido-dinheiro {
+    display: block;
+}
+
+.titulo-contato {
+    margin-top: 24px;
+    margin-bottom: 14px;
+    font-size: 22px;
+}
+
+.botao-enviar-doacao {
+    display: block;
+    width: 170px;
+    height: 42px;
+    margin: 24px 0 0 auto;
+    border: 1px solid #365f53;
+    border-radius: 22px;
+    background-color: #98d2bd;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.botao-enviar-doacao:hover {
+    background-color: #86c7ae;
+}
+
+/* =========================
+   Modal de confirmação de exclusão
+   ========================= */
+
+.modal-confirmacao-fundo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(255, 253, 243, 0.45);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 20;
+}
+
+.modal-confirmacao-fundo.ativo {
+    display: flex;
+}
+
+.modal-confirmacao {
+    width: min(520px, 100%);
+    background-color: #fffdf3;
+    border: 1px solid #365f53;
+    border-radius: 22px;
+    padding: 30px 32px;
+    box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
+    text-align: center;
+}
+
+.modal-confirmacao h2 {
+    margin: 0 0 12px;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.modal-confirmacao p {
+    margin: 0;
+    color: #365f53;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.botoes-confirmacao {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 26px;
+}
+
+.botao-cancelar,
+.botao-confirmar-exclusao {
+    min-width: 110px;
+    height: 38px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.botao-cancelar {
+    border: 1px solid #9d9d9d;
+    background-color: #fffdf3;
+    color: #365f53;
+}
+
+.botao-confirmar-exclusao {
+    border: 1px solid #9d4b4b;
+    background-color: #d96b6b;
+    color: #fff;
+}
+
+.botao-confirmar-exclusao:hover {
+    background-color: #c85c5c;
+}
+
+.acoes-status-doacao {
+    display: none;
+    justify-content: space-between;
+}
+
+.botao-status-confirmar {
+    width: 128px;
+    margin: 0;
+}
+
+.botao-marcar-entregue {
+    display: none;
+    width: 190px;
+    margin-top: 24px;
+}
+
+/* =========================
+   Modal de detalhes da doação
+   ========================= */
+
+.modal-detalhes {
+    position: relative;
+    width: min(640px, 100%);
+    background-color: #fffdf3;
+    border: 1px solid #365f53;
+    border-radius: 18px;
+    padding: 28px 30px 24px;
+    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.22);
+}
+
+.modal-detalhes-pedido,
+.modal-atender-pedido {
+    width: min(720px, 100%);
+}
+
+.modal-detalhes h3 {
+    margin: 18px 0 8px;
+    color: #365f53;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.modal-detalhes h3:first-of-type {
+    margin-top: 0;
+}
+
+.botao-confirmar-atendimento {
+    width: 210px;
+    margin-top: 18px;
+}
+
+.fechar-detalhes {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background-color: #000;
+    color: #fff;
+    font-size: 16px;
+    line-height: 17px;
+    cursor: pointer;
+}
+
+.modal-detalhes h2 {
+    margin: 0 0 16px;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.modal-detalhes .status {
+    margin-bottom: 18px;
+}
+
+.detalhes-caixa {
+    margin: 18px 0 22px;
+    padding: 14px;
+    border-radius: 8px;
+    background-color: #cfe8df;
+    text-align: left;
+}
+
+.detalhes-caixa.secundaria {
+    background-color: #ebe9e2;
+}
+
+.contato-doador {
+    display: none;
+}
+
+.contato-doador.ativo {
+    display: block;
+}
+
+.detalhes-caixa p {
+    margin: 0 0 6px;
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.detalhes-caixa p:last-child {
+    margin-bottom: 0;
+}
+
+.detalhe-observacao {
+    margin: 0;
+    color: #000;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+/* =========================
+   Responsividade
+   ========================= */
+
+@media (max-width: 1100px) {
+    .cards-painel {
+        grid-template-columns: 1fr;
+        gap: 26px;
+    }
+
+    .card-painel {
+        min-height: 380px;
+    }
+}
+
+@media (max-width: 700px) {
+    .painel-doador {
+        padding: 22px 20px 36px;
+    }
+
+    .usuario {
+        gap: 14px;
+    }
+
+    .usuario img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .usuario p {
+        font-size: 16px;
+    }
+
+    .botao-doacao {
+        width: 100%;
+        min-width: 0;
+        height: 50px;
+        font-size: 16px;
+    }
+
+    .texto-introducao {
+        font-size: 16px;
+    }
+
+    .card-painel {
+        min-height: 330px;
+        padding: 28px 22px;
+        border-radius: 18px;
+    }
+
+    .card-painel h2,
+    .mensagem-vazia h3 {
+        font-size: 20px;
+    }
+
+    .card-painel > p,
+    .mensagem-vazia p {
+        font-size: 14px;
+    }
+
+    .modal-fundo,
+    .modal-confirmacao-fundo {
+        padding: 18px;
+    }
+
+    .modal-doacao {
+        padding: 34px 24px 28px;
+    }
+
+    .fechar-modal {
+        top: 24px;
+        right: 24px;
+    }
+
+    .opcoes-doacao {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .botao-enviar-doacao {
+        width: 100%;
+    }
+
+    .cabecalho-doacoes {
+        display: none;
+    }
+
+    .linha-doacao {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 12px 0;
+    }
+}
+
+.erro-campo {
+    display: none;
+    margin: 5px 0 0 12px;
+    color: #c94c4c;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+/*
+ * Os erros de validação só aparecem depois que o usuário tenta enviar o formulário.
+ * A classe .formulario-tentou-enviar é adicionada pelo JavaScript no submit.
+ * Isso evita que campos vazios apareçam em vermelho assim que o modal abre.
+ */
+
+.modal-doacao.formulario-tentou-enviar .grupo-campo input:invalid,
+.modal-doacao.formulario-tentou-enviar .grupo-campo textarea:invalid,
+.modal-doacao.formulario-tentou-enviar .grupo-campo select:invalid {
+    border-color: #c94c4c;
+    box-shadow: 0 0 0 3px rgba(201, 76, 76, 0.12);
+}
+
+.modal-doacao.formulario-tentou-enviar .grupo-campo input:invalid ~ .erro-campo,
+.modal-doacao.formulario-tentou-enviar .grupo-campo textarea:invalid ~ .erro-campo,
+.modal-doacao.formulario-tentou-enviar .grupo-campo select:invalid ~ .erro-campo {
+    display: block;
+}

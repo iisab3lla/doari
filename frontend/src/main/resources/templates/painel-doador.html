@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doari - Painel do Doador</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/painel-doador.css(v=3)}">
+</head>
+<body>
+
+<main class="painel-doador">
+    <header class="topo-painel">
+        <div class="usuario">
+            <img th:src="@{/img/TulipIcon.png}" alt="Logo da Doari">
+            <p>Olá, <strong th:text="${nomeDoador}">Doador</strong></p>
+        </div>
+
+        <a th:href="@{/logout}" class="botao-sair" aria-label="Sair">
+            <img th:src="@{/img/Logout.png}" alt="Sair">
+        </a>
+    </header>
+
+    <section class="conteudo-painel">
+        <button type="button" id="abrirModalDoacao" hidden></button>
+
+        <p class="texto-introducao">
+            Atenda pedidos de ONGs e acompanhe suas ofertas.
+        </p>
+
+        <p class="form-message success-message" th:if="${mensagem}" th:text="${mensagem}"></p>
+        <p class="form-message error-message" th:if="${erro}" th:text="${erro}"></p>
+
+        <div class="cards-painel">
+            <section class="card-painel">
+                <h2>Pedidos abertos das ONGs</h2>
+                <p>Escolha um pedido para ajudar diretamente.</p>
+
+                <div class="mensagem-vazia" th:if="${#lists.isEmpty(pedidos)}">
+                    <h3>Nenhum pedido disponível no momento</h3>
+                    <p>Novos pedidos aparecerão aqui.</p>
+                </div>
+
+                <div class="tabela-doacoes tabela-pedidos-doador" th:if="${!#lists.isEmpty(pedidos)}">
+                    <div class="cabecalho-doacoes">
+                        <span>Item solicitado</span>
+                        <span>Quantidade</span>
+                        <span>ONG</span>
+                        <span>Ação</span>
+                    </div>
+
+                    <div class="linha-doacao" th:each="pedido : ${pedidos}">
+                        <span th:text="${pedido.item}">Arroz</span>
+                        <span th:text="${pedido.quantidade}">10 kg</span>
+                        <span th:text="${pedido.ongNome}">ONG Esperanca</span>
+                        <div class="acoes-doacao">
+                            <button
+                                    type="button"
+                                    class="botao-atender-pedido"
+                                    th:attr="
+                                        data-id=${pedido.id},
+                                        data-item=${pedido.item},
+                                        data-quantidade=${pedido.quantidade},
+                                        data-descricao=${pedido.descricao},
+                                        data-data=${pedido.data},
+                                        data-ong=${pedido.ongNome},
+                                        data-cidade=${pedido.ongCidade}">
+                                Atender pedido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card-painel">
+                <h2>Minhas doações</h2>
+                <p>Acompanhe os pedidos que você decidiu atender.</p>
+
+                <div class="mensagem-vazia" th:if="${#lists.isEmpty(doacoes)}">
+                    <h3>Nenhum pedido atendido ainda</h3>
+                    <p>Escolha um pedido aberto para ajudar uma ONG.</p>
+                </div>
+
+                <div class="tabela-doacoes" th:if="${!#lists.isEmpty(doacoes)}">
+                    <div class="cabecalho-doacoes">
+                        <span>Item doado</span>
+                        <span>Destino</span>
+                        <span>Status</span>
+                        <span>Ação</span>
+                    </div>
+
+                    <div class="linha-doacao" th:each="doacao : ${doacoes}">
+                        <span th:text="${doacao.itemDoado}">Alimento</span>
+                        <span th:text="${doacao.destino}">Disponível para ONGs</span>
+                        <span class="status" th:classappend="${doacao.statusCss}" th:text="${doacao.status}">Disponível</span>
+
+                        <div class="acoes-doacao">
+                            <button
+                                    type="button"
+                                    class="botao-visualizar-doacao"
+                                    th:attr="
+                                        data-item=${doacao.itemDoado},
+                                        data-status=${doacao.status},
+                                        data-destino=${doacao.destino},
+                                        data-mensagem=${doacao.mensagem},
+                                        data-data=${doacao.data}">
+                                <img th:src="@{/img/Eye.png}" alt="Visualizar doação">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+
+<div class="modal-fundo" id="modalDoacao">
+    <form class="modal-doacao" th:action="@{/doacoes}" method="post">
+        <button type="button" class="fechar-modal" id="fecharModalDoacao">x</button>
+
+        <h2>Oferecer doação</h2>
+        <p class="modal-subtitulo">Cadastre uma doação para ONGs interessadas.</p>
+
+        <div class="grupo-campo">
+            <h3>Tipo de doação</h3>
+
+            <div class="opcoes-doacao">
+                <label>
+                    <input type="radio" name="tipoDoacao" value="fisico" required>
+                    Item físico
+                </label>
+
+                <label>
+                    <input type="radio" name="tipoDoacao" value="dinheiro" required>
+                    Dinheiro
+                </label>
+            </div>
+        </div>
+
+        <div class="campos-tipo campos-fisico">
+            <div class="grupo-campo">
+                <label for="item">O que você quer doar:</label>
+                <input type="text" id="item" name="item" minlength="2" maxlength="80" placeholder="Ex. Roupas, alimentos, brinquedos.">
+                <small class="erro-campo">Informe o que você quer doar.</small>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="quantidade">Quantidade</label>
+                <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Ex. 10">
+                <small class="erro-campo">Informe a quantidade.</small>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="unidade">Unidade</label>
+                <select id="unidade" name="unidade">
+                    <option value="">-Selecione-</option>
+                    <option value="Pecas">Peças</option>
+                    <option value="Kg">Kg</option>
+                    <option value="Litros">Litros</option>
+                    <option value="Unidades">Unidades</option>
+                </select>
+                <small class="erro-campo">Selecione a unidade.</small>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="mensagemFisico">Mensagem para a ONG</label>
+                <textarea id="mensagemFisico" name="mensagemFisico" placeholder="Conte mais sobre o que está doando..."></textarea>
+            </div>
+        </div>
+
+        <div class="campos-tipo campos-dinheiro">
+            <div class="grupo-campo">
+                <label for="valor">Valor:</label>
+                <input type="text" id="valor" name="valor" placeholder="R$" maxlength="20">
+                <small class="erro-campo">Informe o valor da doação.</small>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="mensagemDinheiro">Mensagem para a ONG</label>
+                <textarea id="mensagemDinheiro" name="mensagemDinheiro" placeholder="Deixe uma mensagem..."></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="botao-enviar-doacao">
+            Oferecer doação
+        </button>
+    </form>
+</div>
+
+<div class="modal-confirmacao-fundo" id="modalConfirmacaoExclusao">
+    <div class="modal-confirmacao">
+        <h2>Excluir doação?</h2>
+
+        <p>
+            Tem certeza que deseja excluir
+            <strong id="nomeDoacaoExcluir">esta doação</strong>?
+        </p>
+
+        <div class="botoes-confirmacao">
+            <button type="button" class="botao-cancelar" id="cancelarExclusao">
+                Cancelar
+            </button>
+
+            <form th:action="@{/doacoes/excluir}" method="post">
+                <input type="hidden" name="id" id="idDoacaoExcluir">
+
+                <button type="submit" class="botao-confirmar-exclusao">
+                    Excluir
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-confirmacao-fundo" id="modalDetalhesDoacao">
+    <div class="modal-detalhes">
+        <button type="button" class="fechar-detalhes" id="fecharDetalhesDoacao">x</button>
+
+        <h2>Detalhes da doação</h2>
+
+        <span class="status" id="detalheStatus">Solicitada</span>
+
+        <div class="detalhes-caixa">
+            <p><strong>Item:</strong> <span id="detalheItem"></span></p>
+            <p><strong>Destino:</strong> <span id="detalheDestino"></span></p>
+            <p><strong>Enviado em:</strong> <span id="detalheData"></span></p>
+            <p><strong>Mensagem:</strong> "<span id="detalheMensagem"></span>"</p>
+        </div>
+
+        <p class="detalhe-observacao" id="detalheObservacao">
+            Aguardando confirmação da ONG.
+        </p>
+    </div>
+</div>
+
+<div class="modal-confirmacao-fundo" id="modalDetalhesPedido">
+    <div class="modal-detalhes modal-detalhes-pedido">
+        <button type="button" class="fechar-detalhes" id="fecharDetalhesPedido">x</button>
+
+        <h2>Detalhes do pedido</h2>
+
+        <h3>Sobre a ONG</h3>
+        <div class="detalhes-caixa">
+            <p><strong>Nome:</strong> <span id="detalhePedidoOng"></span></p>
+            <p><strong>Cidade:</strong> <span id="detalhePedidoCidade"></span></p>
+        </div>
+
+        <h3>Sobre o pedido</h3>
+        <div class="detalhes-caixa">
+            <p><strong>Item:</strong> <span id="detalhePedidoItem"></span></p>
+            <p><strong>Quantidade:</strong> <span id="detalhePedidoQuantidade"></span></p>
+            <p><strong>Descrição:</strong> "<span id="detalhePedidoDescricao"></span>"</p>
+            <p><strong>Publicado em:</strong> <span id="detalhePedidoData"></span></p>
+        </div>
+
+        <button type="button" class="botao-enviar-doacao botao-confirmar-atendimento" id="abrirAtendimentoPedido">
+            Quero atender este pedido
+        </button>
+    </div>
+</div>
+
+<div class="modal-confirmacao-fundo" id="modalAtenderPedido">
+    <form class="modal-doacao modal-atender-pedido" th:action="@{/pedidos/atender}" method="post">
+        <button type="button" class="fechar-modal" id="fecharAtenderPedido">x</button>
+
+        <h2>Atender pedido</h2>
+
+        <input type="hidden" name="pedidoId" id="atenderPedidoId">
+
+        <div class="detalhes-caixa">
+            <p><strong>ONG:</strong> <span id="atenderPedidoOng"></span></p>
+            <p><strong>Item solicitado:</strong> <span id="atenderPedidoItem"></span></p>
+            <p><strong>Quantidade:</strong> <span id="atenderPedidoQuantidade"></span></p>
+            <p><strong>Descrição:</strong> "<span id="atenderPedidoDescricao"></span>"</p>
+        </div>
+
+        <h3 class="titulo-contato">Sua oferta</h3>
+
+        <div class="grupo-campo">
+            <label for="quantidadeAtendimento">Quantidade que você pode doar:</label>
+            <input type="number" id="quantidadeAtendimento" name="quantidade" min="1" placeholder="Ex. 50" required>
+            <small class="erro-campo">Informe a quantidade.</small>
+        </div>
+
+        <div class="grupo-campo">
+            <label for="unidadeAtendimento">Unidade</label>
+            <select id="unidadeAtendimento" name="unidade" required>
+                <option value="">-Selecione-</option>
+                <option value="Pecas">Peças</option>
+                <option value="Kg">Kg</option>
+                <option value="Litros">Litros</option>
+                <option value="Unidades">Unidades</option>
+                <option value="Dinheiro">Dinheiro</option>
+            </select>
+            <small class="erro-campo">Selecione a unidade.</small>
+        </div>
+
+        <div class="grupo-campo">
+            <label for="mensagemAtendimento">Mensagem para a ONG</label>
+            <textarea id="mensagemAtendimento" name="mensagem" placeholder="Deixe uma mensagem..."></textarea>
+        </div>
+
+        <h3 class="titulo-contato">Seus dados de contato</h3>
+
+        <div class="grupo-campo">
+            <label for="nomeContato">Nome completo:</label>
+            <input type="text" id="nomeContato" name="nomeContato" minlength="2" placeholder="Ex. Joao Silva" required>
+            <small class="erro-campo">Informe seu nome.</small>
+        </div>
+
+        <div class="grupo-campo">
+            <label for="emailContato">E-mail:</label>
+            <input type="email" id="emailContato" name="emailContato" placeholder="Ex. joao@email.com" required>
+            <small class="erro-campo">Informe um e-mail válido.</small>
+        </div>
+
+        <div class="grupo-campo">
+            <label for="telefoneContato">Telefone:</label>
+            <input type="text" id="telefoneContato" name="telefoneContato" placeholder="Ex. (51) 99999-9999" required>
+            <small class="erro-campo">Informe seu telefone.</small>
+        </div>
+
+        <button type="submit" class="botao-enviar-doacao">
+            Confirmar doação
+        </button>
+    </form>
+</div>
+
+<script th:src="@{/js/painel-doador.js(v=3)}"></script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doari - Cadastro</title>
+
+    <!-- Fonte principal do projeto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+    <!-- CSS da página de cadastro -->
+    <link rel="stylesheet" th:href="@{/css/cadastro.css}">
+</head>
+<body>
+
+<main class="register-page">
+
+    <!-- Área visual da marca, exibida no lado esquerdo da tela -->
+    <section class="register-brand">
+        <h1>Seja bem-vindo à <span>Doari</span></h1>
+
+        <div class="brand-logo">
+            <img th:src="@{/img/DonationIcon.png}" alt="Ícone de doação">
+        </div>
+
+        <p>Conectando quem quer doar a quem precisa.</p>
+    </section>
+
+    <!-- Área de cadastro, exibida no lado direito da tela -->
+    <section class="register-form-area">
+        <div class="register-panel">
+
+            <!-- Cabeçalho com seleção do tipo de cadastro -->
+            <div class="register-header">
+                <h2>REGISTRE-SE</h2>
+
+                <div class="account-type">
+                    <a
+                            class="type-button"
+                            th:classappend="${tipo == 'ong'} ? ' active'"
+                            th:href="@{/cadastro(tipo='ong')}">
+
+                        <img th:src="@{/img/TulipIcon.png}" alt="">
+                        <span>ONGs</span>
+                    </a>
+
+                    <a
+                            class="type-button"
+                            th:classappend="${tipo == 'doador'} ? ' active'"
+                            th:href="@{/cadastro(tipo='doador')}">
+
+                        <img th:src="@{/img/DoadoresIcon.png}" alt="">
+                        <span>Doadores</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mensagens opcionais enviadas pelo controller -->
+            <p class="form-message success-message" th:if="${mensagem}" th:text="${mensagem}"></p>
+            <p class="form-message error-message" th:if="${erro}" th:text="${erro}"></p>
+
+            <!-- Formulário exibido quando o tipo selecionado é ONG -->
+            <form
+                    class="register-form ong-form"
+                    th:action="@{/cadastro/ong}"
+                    th:if="${tipo == 'ong'}"
+                    method="post">
+
+                <div class="form-field">
+                    <label for="ongName" class="sr-only">Nome da ONG</label>
+                    <input
+                            type="text"
+                            id="ongName"
+                            name="ongName"
+                            placeholder="Nome da ONG..."
+                            minlength="2"
+                            maxlength="80"
+                            required>
+                    <small class="field-error">Digite pelo menos 2 caracteres.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="cnpj" class="sr-only">CNPJ</label>
+                    <input
+                            type="text"
+                            id="cnpj"
+                            name="cnpj"
+                            placeholder="CNPJ..."
+                            inputmode="numeric"
+                            pattern="[0-9]{14}"
+                            minlength="14"
+                            maxlength="14"
+                            title="Digite os 14 números do CNPJ."
+                            required>
+                    <small class="field-error">Digite os 14 números do CNPJ.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="city" class="sr-only">Cidade</label>
+                    <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            placeholder="Cidade..."
+                            minlength="2"
+                            maxlength="60"
+                            required>
+                    <small class="field-error">Digite pelo menos 2 caracteres.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="state" class="sr-only">Estado</label>
+                    <input
+                            type="text"
+                            id="state"
+                            name="state"
+                            placeholder="UF..."
+                            pattern="[A-Za-z]{2}"
+                            minlength="2"
+                            maxlength="2"
+                            title="Digite a sigla do estado com 2 letras. Exemplo: SP"
+                            required>
+                    <small class="field-error">Digite a UF com 2 letras. Exemplo: SP.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="phone" class="sr-only">Telefone</label>
+                    <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="Telefone..."
+                            inputmode="numeric"
+                            pattern="[0-9]{10,11}"
+                            minlength="10"
+                            maxlength="11"
+                            title="Digite apenas números, com DDD. Exemplo: 11987654321"
+                            required>
+                    <small class="field-error">Digite apenas números com DDD.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="email" class="sr-only">E-mail</label>
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="E-mail..."
+                            maxlength="120"
+                            required>
+                    <small class="field-error">Digite um e-mail válido.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="password" class="sr-only">Senha</label>
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Senha..."
+                            minlength="8"
+                            maxlength="60"
+                            required>
+                    <small class="field-error">A senha deve ter pelo menos 8 caracteres.</small>
+                </div>
+
+                <button type="submit">Criar conta</button>
+
+                <p class="login-text">
+                    Já tem uma conta?
+                    <a th:href="@{/login}">Entrar</a>
+                </p>
+            </form>
+
+            <!-- Formulário exibido quando o tipo selecionado é Doador -->
+            <form
+                    class="register-form donor-form"
+                    th:action="@{/cadastro/doador}"
+                    th:if="${tipo == 'doador'}"
+                    method="post">
+
+                <div class="form-field">
+                    <label for="fullName" class="sr-only">Nome completo</label>
+                    <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            placeholder="Nome completo..."
+                            minlength="2"
+                            maxlength="80"
+                            required>
+                    <small class="field-error">Digite pelo menos 2 caracteres.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="donorPhone" class="sr-only">Telefone</label>
+                    <input
+                            type="tel"
+                            id="donorPhone"
+                            name="phone"
+                            placeholder="Telefone..."
+                            inputmode="numeric"
+                            pattern="[0-9]{10,11}"
+                            minlength="10"
+                            maxlength="11"
+                            title="Digite apenas números, com DDD. Exemplo: 11987654321"
+                            required>
+                    <small class="field-error">Digite apenas números com DDD.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="donorCity" class="sr-only">Cidade</label>
+                    <input
+                            type="text"
+                            id="donorCity"
+                            name="city"
+                            placeholder="Cidade..."
+                            minlength="2"
+                            maxlength="60"
+                            required>
+                    <small class="field-error">Digite pelo menos 2 caracteres.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="donorState" class="sr-only">Estado</label>
+                    <input
+                            type="text"
+                            id="donorState"
+                            name="state"
+                            placeholder="UF..."
+                            pattern="[A-Za-z]{2}"
+                            minlength="2"
+                            maxlength="2"
+                            title="Digite a sigla do estado com 2 letras. Exemplo: SP"
+                            required>
+                    <small class="field-error">Digite a UF com 2 letras. Exemplo: SP.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="donorEmail" class="sr-only">E-mail</label>
+                    <input
+                            type="email"
+                            id="donorEmail"
+                            name="email"
+                            placeholder="E-mail..."
+                            maxlength="120"
+                            required>
+                    <small class="field-error">Digite um e-mail válido.</small>
+                </div>
+
+                <div class="form-field">
+                    <label for="donorPassword" class="sr-only">Senha</label>
+                    <input
+                            type="password"
+                            id="donorPassword"
+                            name="password"
+                            placeholder="Senha..."
+                            minlength="8"
+                            maxlength="60"
+                            required>
+                    <small class="field-error">A senha deve ter pelo menos 8 caracteres.</small>
+                </div>
+
+                <button type="submit">Criar conta</button>
+
+                <p class="login-text">
+                    Já tem uma conta?
+                    <a th:href="@{/login}">Entrar</a>
+                </p>
+            </form>
+
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>

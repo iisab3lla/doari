@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doari - Login</title>
+
+    <!-- Fonte principal do projeto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+    <!-- CSS da página de login -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+    <main class="login-page">
+
+        <!-- Área visual da marca, exibida no lado esquerdo da tela -->
+        <section class="login-brand">
+            <h1>Seja bem-vindo à <span>Doari</span></h1>
+
+            <div class="brand-logo">
+                <img th:src="@{/img/DonationIcon.png}" alt="Ícone de doação">
+            </div>
+
+            <p>Conectando quem quer doar a quem precisa.</p>
+        </section>
+
+        <!-- Área do formulário de login, exibida no lado direito da tela -->
+        <section class="login-form-area">
+            <form class="login-form" th:action="@{/login}" method="post">
+            <h2>LOGIN</h2>
+                <p class="form-message success-message" th:if="${mensagem}" th:text="${mensagem}"></p>
+                <p class="form-message error-message" th:if="${erro}" th:text="${erro}"></p>
+
+                <!-- Campo de e-mail -->
+                <div class="form-field">
+                    <label for="email" class="sr-only">E-mail</label>
+                    <img class="field-icon" th:src="@{/img/UserMale.png}" alt="">
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Digite seu e-mail..."
+                            maxlength="120"
+                            required>
+                    <small class="field-error">Digite um e-mail válido.</small>
+                </div>
+
+                <!-- Campo de senha -->
+                <div class="form-field">
+                    <label for="password" class="sr-only">Senha</label>
+                    <img class="field-icon" th:src="@{/img/Lock.png}" alt="">
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Digite sua senha..."
+                            minlength="8"
+                            maxlength="60"
+                            required>
+
+                    <small class="field-error">A senha deve ter pelo menos 8 caracteres.</small>
+                </div>
+
+                <button type="submit">ENTRAR</button>
+
+                <!-- Link para a página de cadastro -->
+                <p class="register-text">
+                    Não tem uma conta?
+                    <a th:href="@{/cadastro}">Registre-se</a>
+                </p>
+            </form>
+
+        </section>
+    </main>
+
+</body>
+</html>

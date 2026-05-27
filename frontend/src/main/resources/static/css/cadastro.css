@@ -1,0 +1,237 @@
+/* Reset básico e fonte padrão */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Nunito", sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+/* Estrutura principal da página */
+.register-page {
+    min-height: 100vh;
+    display: flex;
+}
+
+.register-brand,
+.register-form-area {
+    flex: 1;
+    min-height: 100vh;
+}
+
+/* Lado esquerdo: identidade visual */
+.register-brand {
+    background-color: #98d2bd;
+    color: #fffdf3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 35px;
+    padding: 50px 0;
+}
+
+.register-brand h1 {
+    width: min(78%, 680px);
+    font-size: 38px;
+    margin: 0;
+    text-align: center;
+}
+
+.register-brand h1 span {
+    color: #365f53;
+}
+
+.register-brand p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.brand-logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.brand-logo img {
+    width: min(72%, 620px);
+    display: block;
+}
+
+/* Lado direito: área de cadastro */
+.register-form-area {
+    background-color: #fffdf3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-panel {
+    width: min(58%, 540px);
+}
+
+/* Cabeçalho e seleção do tipo de conta */
+.register-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.register-header h2 {
+    margin: 0;
+    color: #365f53;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.account-type {
+    display: flex;
+    gap: 14px;
+}
+
+.type-button {
+    width: 70px;
+    height: 70px;
+    border: none;
+    border-radius: 18px;
+    background-color: #fffdf3;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+.type-button img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.type-button span {
+    color: #365f53;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.type-button.active {
+    background-color: #365f53;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.20);
+}
+
+.type-button.active span {
+    color: #fffdf3;
+}
+
+.type-button.active img {
+    filter: brightness(0) invert(1);
+}
+
+/* Formulários */
+.register-form {
+    width: 100%;
+}
+
+.form-field {
+    margin-bottom: 14px;
+}
+
+.form-field input {
+    width: 100%;
+    height: 52px;
+    border: 1px solid #b8b8b8;
+    border-radius: 30px;
+    padding: 0 28px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #777;
+    background-color: #fffdf3;
+}
+
+.form-field input::placeholder {
+    color: #9a9a9a;
+    opacity: 1;
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: #365f53;
+    box-shadow: 0 0 0 3px rgba(54, 95, 83, 0.12);
+}
+
+/* Esconde labels visualmente, mantendo acessibilidade para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+}
+
+/* Mensagens de validação dos campos */
+.field-error {
+    display: none;
+    margin: 4px 0 0 28px;
+    color: #c94c4c;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.form-field input:invalid:not(:placeholder-shown) {
+    border-color: #c94c4c;
+    box-shadow: 0 0 0 3px rgba(201, 76, 76, 0.12);
+}
+
+.form-field input:invalid:not(:placeholder-shown) ~ .field-error {
+    display: block;
+}
+
+/* Botão principal */
+.register-form button {
+    width: 100%;
+    height: 58px;
+    border: none;
+    border-radius: 32px;
+    margin-top: 8px;
+    background-color: #98d2bd;
+    color: #fffdf3;
+    font-size: 24px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.register-form button:hover {
+    background-color: #86c7ae;
+}
+
+/* Link para voltar ao login */
+.login-text {
+    text-align: center;
+    margin-top: 18px;
+    color: #777;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.login-text a {
+    color: #98d2bd;
+    text-decoration: none;
+}
+
+.login-text a:hover {
+    text-decoration: underline;
+}

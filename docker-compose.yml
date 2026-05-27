@@ -1,0 +1,96 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: doari-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./backend/docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  usuarios-service:
+    build:
+      context: ./backend
+      dockerfile: usuarios-service/Dockerfile
+    container_name: doari-usuarios-service
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usuarios_db
+      SPRING_DATASOURCE_USERNAME: doari
+      SPRING_DATASOURCE_PASSWORD: doari
+      JWT_SECRET: doari-compose-secret-change-me-please-32chars
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  notificacao-service:
+    build:
+      context: ./backend
+      dockerfile: notificacao-service/Dockerfile
+    container_name: doari-notificacao-service
+    environment:
+      SERVER_PORT: 8083
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notificacoes_db
+      SPRING_DATASOURCE_USERNAME: doari
+      SPRING_DATASOURCE_PASSWORD: doari
+      JWT_SECRET: doari-compose-secret-change-me-please-32chars
+      NOTIFICACAO_INTERNAL_TOKEN: doari-compose-internal-token-change-me
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  doacoes-service:
+    build:
+      context: ./backend
+      dockerfile: doacoes-service/Dockerfile
+    container_name: doari-doacoes-service
+    environment:
+      SERVER_PORT: 8082
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/doacoes_db
+      SPRING_DATASOURCE_USERNAME: doari
+      SPRING_DATASOURCE_PASSWORD: doari
+      NOTIFICACAO_SERVICE_URL: http://notificacao-service:8083
+      JWT_SECRET: doari-compose-secret-change-me-please-32chars
+      NOTIFICACAO_INTERNAL_TOKEN: doari-compose-internal-token-change-me
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      notificacao-service:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: doari-frontend
+    environment:
+      SERVER_PORT: 8080
+      USUARIOS_SERVICE_URL: http://usuarios-service:8081
+      DOACOES_SERVICE_URL: http://doacoes-service:8082
+      NOTIFICACOES_SERVICE_URL: http://notificacao-service:8083
+      PUBLIC_NOTIFICACOES_URL: http://localhost:8083
+    ports:
+      - "8080:8080"
+    depends_on:
+      usuarios-service:
+        condition: service_started
+      doacoes-service:
+        condition: service_started
+      notificacao-service:
+        condition: service_started
+
+volumes:
+  mysql-data:

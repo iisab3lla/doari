@@ -1,0 +1,38 @@
+# Java / Maven
+target/
+build/
+out/
+*.class
+
+# Logs
+*.log
+logs/
+
+# Environment / local config
+.env
+.env.*
+!.env.example
+application-local.properties
+application-*.local.properties
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker local overrides
+docker-compose.override.yml
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
