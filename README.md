@@ -292,6 +292,10 @@ Projeto desenvolvido para fins acadêmicos.
 |------|--------|
 | Isabella Peroli | https://github.com/iisab3lla |
 | Djonathan Machado | https://github.com/djon4thaN |
+| Murilo Jesus Alves dos Santos | https://github.com/Reeis04 |
+| Naegeli Raiane Guerra | https://github.com/nayguerra |
+| João Victor Araujo de Oliveira | https://github.com/jvss7 |
+| Kaique Lopes Silva | https://github.com/kl606786-wq |
 
 ---
 
