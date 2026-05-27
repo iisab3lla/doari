@@ -290,7 +290,8 @@ Projeto desenvolvido para fins acadêmicos.
 
 | Nome | GitHub |
 |------|--------|
-| Adicione os integrantes aqui | — |
+| Isabella Peroli | https://github.com/iisab3lla |
+| Djonathan Machado | https://github.com/djon4thaN |
 
 ---
 
