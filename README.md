@@ -296,6 +296,9 @@ Projeto desenvolvido para fins acadêmicos.
 | Naegeli Raiane Guerra | https://github.com/nayguerra |
 | João Victor Araujo de Oliveira | https://github.com/jvss7 |
 | Kaique Lopes Silva | https://github.com/kl606786-wq |
+| Thricya Willane Silva | https://github.com/thricya |
+| Aluisio Penna Ordones | https://github.com/pennaor |
+| Calebe de Souza Navarro | https://github.com/CalebeNavarro |
 
 ---
 
